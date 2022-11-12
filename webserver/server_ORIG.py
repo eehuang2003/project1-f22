@@ -114,16 +114,16 @@ def index():
   """
 
   # DEBUG: this is debugging code to see what request looks like
-  # print (request.args)
+  print (request.args)
 
 
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT * FROM movie")
+  cursor = g.conn.execute("SELECT name FROM test")
   names = []
   for result in cursor:
-    names.append((result['movie_id'],result['title']))  # can also be accessed using result[0]
+    names.append(result['name'])  # can also be accessed using result[0]
   cursor.close()
 
   #
@@ -169,24 +169,9 @@ def index():
 # notice that the functio name is another() rather than index()
 # the functions for each app.route needs to have different names
 #
-
-@app.route('/movie/<movieid>')
-def get_movie(movieid):
-  cmd = 'SELECT * FROM movie WHERE movie_id=(:id)'
-  cursor = g.conn.execute(text(cmd),id = movieid)
-  movie = []
-  for i in cursor:
-    movie.append(i)
-  # names = []
-  # for result in cursor:
-  #   names.append(result['title'])  # can also be accessed using result[0]
-  cursor.close()
-  context = dict(data = movie[0])
-  return render_template("moviedetails.html", **context)
-
-@app.route('/newmovie')
+@app.route('/another')
 def another():
-  return render_template("newmovie.html")
+  return render_template("anotherfile.html")
 
 
 # Example of adding new data to the database
@@ -194,15 +179,15 @@ def another():
 def add():
   name = request.form['name']
   print (name)
-  cmd = 'INSERT INTO test(name) VALUES (:name1), (:name2)'
-  g.conn.execute(text(cmd), name1 = name, name2 = name)
+  cmd = 'INSERT INTO test(name) VALUES (:name1), (:name2)';
+  g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
 
-# @app.route('/login')
-# def login():
-#     abort(401)
-#     this_is_never_executed()
+@app.route('/login')
+def login():
+    abort(401)
+    this_is_never_executed()
 
 
 if __name__ == "__main__":
